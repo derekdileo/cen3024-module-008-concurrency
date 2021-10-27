@@ -10,7 +10,17 @@ public class Main {
 	 * */
 	protected static int arraySize = 200000;
 	protected static double[] randomArray = null;
-	
+	private static SumParallel sumParallel;
+	private static SumSingle sumSingle;
+	private static Thread t0;
+	private static Thread t1;
+	private static Thread t2;
+	private static Thread t3;
+	private static Thread t4;
+	private static Thread t5;
+	private static Thread t6;
+	private static Thread t7;
+	private static Thread t8;
 	
 	
 	public static void main(String[] args) {
@@ -19,43 +29,45 @@ public class Main {
 			randomArray = generateArray();
 		}
 
-		SumParallel sum = new SumParallel();
+		multiThreadSum();
+		//singleThreadSum();
 		
-		Thread t1 = new Thread(sum);
-		Thread t2 = new Thread(sum);
-		Thread t3 = new Thread(sum);
-		Thread t4 = new Thread(sum);
-
+	}
+	
+	public static void multiThreadSum() {
+		// Instantiate SumParallel object
+		sumParallel = new SumParallel();
+		
+		// Create new Threads of Runnable SumParallel
+		t1 = new Thread(sumParallel);
+		t2 = new Thread(sumParallel);
+		t3 = new Thread(sumParallel);
+		t4 = new Thread(sumParallel);
+		t5 = new Thread(sumParallel);
+		t6 = new Thread(sumParallel);
+		t7 = new Thread(sumParallel);
+		t8 = new Thread(sumParallel);
+		
+		// Spin up Threads
 		t1.start();
 		t2.start();
 		t3.start();
 		t4.start();
+		t5.start();
+		t6.start();
+		t7.start();
+		t8.start();
+	}
+	
+	public static void singleThreadSum() {
+		// Instantiate SumSingle object
+		sumSingle = new SumSingle();
 		
+		// Create a single Thread of Runnable SumSingle
+		t0 = new Thread(sumSingle);
 		
-		
-//		try { 
-//			// Java Thread join method can be used to pause the current 
-//			// thread execution until & unless the specified thread is dead
-//			t1.join();
-//			t2.join();
-//		} catch (InterruptedException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		
-		// You can just create a thread directly inside the main method without creating another Class
-//		Thread t = new Thread(new Runnable() {
-//
-//			@Override
-//			public void run() {
-//				
-//				
-//			}
-//			
-//			
-//		});
-//		
-//		t.start();
+		// Spin up Thread
+		t0.start();
 	}
 	
 	public static double[] generateArray() {
