@@ -8,13 +8,17 @@ public class Main {
 	 * Compute the sum in parallel using multiple threads. 
 	 * Then compute the sum with only one thread, and display the sum and times for both cases.
 	 * */
-	protected static int arraySize = 20000000;
+	protected static int arraySize = 200000000;
 	protected static double[] randomArray = null;
 	private static SumParallel sumParallel;
 	private static SumParallelThread spt1;
 	private static SumParallelThread spt2;
 	private static SumParallelThread spt3;
 	private static SumParallelThread spt4;
+	private static SumParallelThread spt5;
+	private static SumParallelThread spt6;
+	private static SumParallelThread spt7;
+	private static SumParallelThread spt8;
 	private static SumSingle sumSingle;
 	private static Thread t0;
 	private static Thread t1;
@@ -34,30 +38,33 @@ public class Main {
 		}
 
 		sumParallelThread();
-		//sumParallel();
-		//sumSingle();
+		
+		while(spt1.isAlive() && spt2.isAlive() && spt3.isAlive() && spt4.isAlive()) {}
+		//while(spt1.isAlive() && spt2.isAlive()) {}
+		
+		sumSingle();
 		
 	}
 	
 	
 	public static void sumParallelThread() {
-		spt1 = new SumParallelThread("One");
-		spt2 = new SumParallelThread("Two");
-		spt3 = new SumParallelThread("Three");
-		spt4 = new SumParallelThread("Four");
+		spt1 = new SumParallelThread("sumThread1");
+		spt2 = new SumParallelThread("sumThread2");
+		spt3 = new SumParallelThread("sumThread3");
+		spt4 = new SumParallelThread("sumThread4");
+//		spt5 = new SumParallelThread("Five");
+//		spt6 = new SumParallelThread("Six");
+//		spt7 = new SumParallelThread("Seven");
+//		spt8 = new SumParallelThread("Eight");
 		
 		spt1.start();
 		spt2.start();
 		spt3.start();
 		spt4.start();
-		try {
-			spt2.join();
-			spt3.join();
-			spt4.join();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		spt5.start();
+//		spt6.start();
+//		spt7.start();
+//		spt8.start();
 		
 	}
 	
@@ -88,7 +95,7 @@ public class Main {
 	
 	public static void sumSingle() {
 		// Instantiate SumSingle object
-		sumSingle = new SumSingle();
+		sumSingle = new SumSingle("sumSingle");
 		
 		// Create a single Thread of Runnable SumSingle
 		t0 = new Thread(sumSingle);

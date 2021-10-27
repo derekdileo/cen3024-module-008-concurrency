@@ -1,10 +1,16 @@
 package main.java;
 
 public class SumSingle implements Runnable {
+	
+	private String threadName;
+	
+	public SumSingle(String name) {
+		this.threadName = name;
+	}
 
-	int index = 0;
-	long sum = 0;
-	long oldSum = 0;
+	private static int index = 0;
+	private static long sum = 0;
+	private static boolean endOfArray = false;
 	protected double[] randomArray = Main.randomArray;
 	private long startTime, endTime, runTime;
 	
@@ -13,39 +19,34 @@ public class SumSingle implements Runnable {
 		
 		startTime = System.nanoTime();
 		
-		while(index != (Main.arraySize - 1)) {
-			if(index == (Main.arraySize - 1)) {
-				break;
-			}
-			sumAtIndex(randomArray);
-			Thread.yield();
-		}
+		endOfArray = sumAtIndexLoop(randomArray);
 		
-		endTime = System.nanoTime();
-		runTime = endTime - startTime;
-		System.out.println("Sum of values is: " + sum);
-		System.out.println("Runtime of single sum is: " + runTime + " nanoSeconds");
+		if(index == (Main.arraySize - 1) && endOfArray) {
+			endTime = System.nanoTime();
+			runTime = endTime - startTime;
+			System.out.println(this.threadName + "'s sum of values is: " + sum + 
+					".\nRuntime of " + this.threadName + " is " + runTime + " nanoSeconds.\n");
+			
+		}
 	}
 
+	public synchronized boolean sumAtIndexLoop(double[] array) {
+		
+		while(index != (Main.arraySize - 1)) {
+			sum += array[index];
+			index++;
+		}
+		return true;
+		
+	}
+	
 	public synchronized long sumAtIndex(double[] array) {
 		if(index == (Main.arraySize - 1)) {
 			System.exit(0);
 		}
-		oldSum = sum;
 		sum += array[index];
-		//System.out.println("Single Thread ID: " + Thread.currentThread().getId() + " \tSum at " + index + " is:  " + array[index] + " + " + oldSum + " = "+ sum);
-
 		index++;
-		//		incrementIndex();
 		return sum;
 	}
-	
-	public synchronized void incrementIndex() {
-		if(index == (Main.arraySize - 1)) {
-			System.exit(0);
-		}
-		index++;
-	}
-	
 	
 }
