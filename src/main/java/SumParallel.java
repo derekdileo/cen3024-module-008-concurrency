@@ -8,7 +8,6 @@ package main.java;
  * Then compute the sum with only one thread, and display the sum and times for both cases.
  * */
 
-
 public class SumParallel implements Runnable {
 
 	int index = 0;

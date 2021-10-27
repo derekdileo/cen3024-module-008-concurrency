@@ -8,9 +8,13 @@ public class Main {
 	 * Compute the sum in parallel using multiple threads. 
 	 * Then compute the sum with only one thread, and display the sum and times for both cases.
 	 * */
-	protected static int arraySize = 200000;
+	protected static int arraySize = 20000000;
 	protected static double[] randomArray = null;
 	private static SumParallel sumParallel;
+	private static SumParallelThread spt1;
+	private static SumParallelThread spt2;
+	private static SumParallelThread spt3;
+	private static SumParallelThread spt4;
 	private static SumSingle sumSingle;
 	private static Thread t0;
 	private static Thread t1;
@@ -29,12 +33,35 @@ public class Main {
 			randomArray = generateArray();
 		}
 
-		multiThreadSum();
-		//singleThreadSum();
+		sumParallelThread();
+		//sumParallel();
+		//sumSingle();
 		
 	}
 	
-	public static void multiThreadSum() {
+	
+	public static void sumParallelThread() {
+		spt1 = new SumParallelThread("One");
+		spt2 = new SumParallelThread("Two");
+		spt3 = new SumParallelThread("Three");
+		spt4 = new SumParallelThread("Four");
+		
+		spt1.start();
+		spt2.start();
+		spt3.start();
+		spt4.start();
+		try {
+			spt2.join();
+			spt3.join();
+			spt4.join();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	
+	public static void sumParallel() {
 		// Instantiate SumParallel object
 		sumParallel = new SumParallel();
 		
@@ -59,7 +86,7 @@ public class Main {
 		t8.start();
 	}
 	
-	public static void singleThreadSum() {
+	public static void sumSingle() {
 		// Instantiate SumSingle object
 		sumSingle = new SumSingle();
 		
