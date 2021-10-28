@@ -1,6 +1,5 @@
 package main.java;
 
-
 /* Implement a parallel array sum, and compare performance with single thread sum. 
  * This is not an easy assignment – just do as much as you can and turn in what you have for partial credit.
  * Make an array of 200 million random numbers between 1 and 10. 
@@ -10,11 +9,11 @@ package main.java;
 
 public class SumParallel implements Runnable {
 
-	int index = 0;
-	long sum = 0;
-	long oldSum = 0;
-	public boolean endOfArray = false;
-	protected double[] randomArray = Main.randomArray;
+	private static int index = 0;
+	private static long sum = 0;
+	private boolean endOfArray = false;
+	private boolean firstThreadFinished = false;
+	private double[] randomArray = Main.randomArray;
 	private long startTime, endTime, runTime;
 	
 	@Override
@@ -22,39 +21,37 @@ public class SumParallel implements Runnable {
 		
 		startTime = System.nanoTime();
 		
-		while(index != (Main.arraySize - 1)) {
-//			if(index == (Main.arraySize - 1)) {
-//				break;
-//			}
-			sumAtIndex(randomArray);
-//			Thread.yield();
+		while(index != (Main.arraySize)) {
+
+			
+			if(endOfArray) {
+			
+				endOfArray = sumAtIndex(randomArray);
+
+				if(!firstThreadFinished) {
+					endTime = System.nanoTime();
+					runTime = endTime - startTime;
+					
+					System.out.println("Sum of values is: " + sum);
+					System.out.println("Runtime of parallel sum is: " + runTime + " nanoSeconds");
+					
+					firstThreadFinished = true;
+					break;
+				}
+			}
 		}
-		endOfArray = true;
-		endTime = System.nanoTime();
-		runTime = endTime - startTime;
-		
-		System.out.println("Sum of values is: " + sum);
-		System.out.println("Runtime of parallel sum is: " + runTime + " nanoSeconds");
 	}
 	
 	
-	public synchronized void sumAtIndex(double[] array) {
-		if(index == (Main.arraySize - 1)) {
-			System.exit(0);
-		}
-		oldSum = sum;
+	private synchronized boolean sumAtIndex(double[] array) {
 		sum += array[index];
-		//System.out.println("Parallel Thread ID: " + Thread.currentThread().getId() + " \tSum at " + index + " is:  " + array[index] + " + " + oldSum + " = "+ sum);
-		index++;
-		//incrementIndex();
-	}
-	
-	
-	public synchronized void incrementIndex() {
+
 		if(index == (Main.arraySize - 1)) {
-			System.exit(0);
+			return true;
 		}
+		
 		index++;
+		return false;
 	}
 
 }
