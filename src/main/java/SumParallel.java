@@ -9,8 +9,8 @@ package main.java;
 
 public class SumParallel implements Runnable {
 
-	private static int index = 0;
-	private static long sum = 0;
+	private int index = 0;
+	private long sum = 0;
 	private boolean endOfArray = false;
 	private boolean firstThreadFinished = false;
 	private double[] randomArray = Main.randomArray;
@@ -21,20 +21,19 @@ public class SumParallel implements Runnable {
 		
 		startTime = System.nanoTime();
 		
-		while(index != (Main.arraySize)) {
+		while(index != (Main.arraySize - 2)) {
 
+			endOfArray = sumAtIndex(randomArray);
 			
 			if(endOfArray) {
-			
-				endOfArray = sumAtIndex(randomArray);
 
 				if(!firstThreadFinished) {
 					endTime = System.nanoTime();
 					runTime = endTime - startTime;
 					
-					System.out.println("Sum of values is: " + sum);
-					System.out.println("Runtime of parallel sum is: " + runTime + " nanoSeconds");
-					
+					System.out.println(ThreadColor.ANSI_BLUE + "Sum of values for Thread ID: " + Thread.currentThread().getId() + " is: " + sum);
+					System.out.println(ThreadColor.ANSI_BLUE + "Runtime of parallel sum for Thread ID: " + Thread.currentThread().getId() + " is: " + runTime + " nanoSeconds");
+					System.out.println("The thread " + Thread.currentThread().getName() + " has finished executing. " + Thread.currentThread().getId());
 					firstThreadFinished = true;
 					break;
 				}
@@ -42,15 +41,22 @@ public class SumParallel implements Runnable {
 		}
 	}
 	
-	
 	private synchronized boolean sumAtIndex(double[] array) {
 		sum += array[index];
 
-		if(index == (Main.arraySize - 1)) {
+		if(index == (Main.arraySize - 2)) {
 			return true;
 		}
 		
+		//index++;
+		return incrementIndex();
+	}
+	
+	private synchronized boolean incrementIndex() {
 		index++;
+		if(index == (Main.arraySize - 3)) {
+			return true;
+		}
 		return false;
 	}
 

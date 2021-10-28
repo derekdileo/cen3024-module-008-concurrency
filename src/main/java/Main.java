@@ -31,27 +31,40 @@ public class Main {
 			randomArray = generateArray();
 		}
 
-		// Use single Thread to perform array sum
+		// Create Thread with anonymous class
+		new Thread() {
+			@Override
+			public void run() {
+				System.out.println(ThreadColor.ANSI_RED + "Anonymous thread.");
+			}
+		}.start();
+		
+		
+		// Use main Thread to perform array sum
 		System.out.println("Calculating single thread sum...");
+		
+		// Grab time
 		startTime = System.nanoTime();
 		
-		for(int i = 0; i < arraySize; i++) {
+		// Iterate through randomArray and sum all values
+		for(int i = 0; i <= arraySize - 1; i++) {
 			sum += randomArray[i];
 		}
 
+		// Calculate total execution time & print results
 		endTime = System.nanoTime();
 		runTime = endTime - startTime;
-		
-		System.out.println("Single thread sum is: " + sum + 
+		System.out.println(ThreadColor.ANSI_CYAN + "Single thread sum is: " + sum + 
 				".\nSingle thread runtime is: " + runTime + " nanoSeconds.\n");
 
 		// Console separation
-		System.out.println("...");
+		System.out.println(ThreadColor.ANSI_PURPLE + "...");
 		System.out.println("...");
 		
 		System.out.println("Calculating multi-thread sum...");
 		
-		
+		// Call sumParallel which creates four Threads
+		// to execute the array sum
 		sumParallel();
 		
 		
@@ -78,6 +91,7 @@ public class Main {
 		
     	// Create new Threads of Runnable SumParallel
 		t1 = new Thread(sumParallel);
+		//t1.setName(" == Parallel Thread 1 == ");
 		t2 = new Thread(sumParallel);
 		t3 = new Thread(sumParallel);
 		t4 = new Thread(sumParallel);
@@ -95,6 +109,7 @@ public class Main {
 		
 		// Create a single Thread of Runnable SumSingle
 		t0 = new Thread(sumSingle);
+		t0.setPriority(10);
 		
 		// Spin up Thread
 		t0.start();
