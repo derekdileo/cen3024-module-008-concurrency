@@ -10,7 +10,7 @@ package main.java;
 public class SumSingle implements Runnable {
 
 	private static int index = 0;
-	private static long sum = 0;
+	private static double sum = 0;
 	private static boolean endOfArray = false;
 	private boolean firstThreadFinished = false;
 	protected double[] randomArray = Main.randomArray;

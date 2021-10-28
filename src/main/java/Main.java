@@ -21,7 +21,8 @@ public class Main {
 	private static Thread t4;
 	
 	// Variables for single-thread execution
-	private static long startTime, endTime, runTime, sum;
+	private static long startTime, endTime, runTime;
+	private static double sum;
 	
 	
 	// Single (Thread) with SumParallelThreads
@@ -55,13 +56,12 @@ public class Main {
 		endTime = System.nanoTime();
 		runTime = endTime - startTime;
 		System.out.println(ThreadColor.ANSI_CYAN + "Single thread sum is: " + sum + 
-				".\nSingle thread runtime is: " + runTime + " nanoSeconds.\n");
+				".\nSingle thread runtime is: " + runTime + " nanoSeconds.");
 
 		// Console separation
 		System.out.println(ThreadColor.ANSI_PURPLE + "...");
-		System.out.println("...");
-		
 		System.out.println("Calculating multi-thread sum...");
+		System.out.println("...");
 		
 		// Call sumParallel which creates four Threads
 		// to execute the array sum
@@ -91,10 +91,13 @@ public class Main {
 		
     	// Create new Threads of Runnable SumParallel
 		t1 = new Thread(sumParallel);
-		//t1.setName(" == Parallel Thread 1 == ");
+		//t1.setName("t1");
 		t2 = new Thread(sumParallel);
+		//t2.setName("t2");
 		t3 = new Thread(sumParallel);
+		//t3.setName("t3");
 		t4 = new Thread(sumParallel);
+		//t4.setName("t4");
 		
 		// Spin up Threads
 		t1.start();
