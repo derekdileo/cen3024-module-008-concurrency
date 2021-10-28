@@ -21,12 +21,17 @@ public class SumParallel implements Runnable {
 		
 		startTime = System.nanoTime();
 		
-		while(index != (Main.arraySize - 2)) {
+		while(index != (Main.arraySize - 1)) {
 
 			endOfArray = sumAtIndex(randomArray);
 			
 			if(endOfArray) {
 
+				// Kill remaining threads if one has finished
+				if(firstThreadFinished) {
+					return;
+				}
+				
 				if(!firstThreadFinished) {
 					endTime = System.nanoTime();
 					runTime = endTime - startTime;
@@ -44,7 +49,7 @@ public class SumParallel implements Runnable {
 	private synchronized boolean sumAtIndex(double[] array) {
 		sum += array[index];
 
-		if(index == (Main.arraySize - 2)) {
+		if(index == (Main.arraySize - 1)) {
 			return true;
 		}
 		
@@ -54,7 +59,7 @@ public class SumParallel implements Runnable {
 	
 	private synchronized boolean incrementIndex() {
 		index++;
-		if(index == (Main.arraySize - 3)) {
+		if(index == (Main.arraySize - 1)) {
 			return true;
 		}
 		return false;
