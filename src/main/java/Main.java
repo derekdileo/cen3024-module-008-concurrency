@@ -10,6 +10,8 @@ public class Main {
 	 * */
 	protected static int arraySize = 200000000;
 	protected static double[] randomArray = null;
+	private static long startTime, endTime, runTime;
+	private static long singleSum = 0;
 	private static SumParallel sumParallel;
 	private static SumParallelThread spt1;
 	private static SumParallelThread spt2;
@@ -37,12 +39,28 @@ public class Main {
 			randomArray = generateArray();
 		}
 
+		// Get current time
+		startTime = System.nanoTime();
+		
+		// Count without using single thread
+		for (int i = 0; i < arraySize; i++) {
+			singleSum += randomArray[i];
+		}
+		
+		endTime = System.nanoTime();
+		runTime = endTime - startTime;
+		
+		System.out.println("Result of singleSum = " + singleSum + 
+				"\nRuntime for singleSum: " + runTime + " nanoSeconds.");
+		
+		System.out.println("...");
+		System.out.println("...");
+		//sumSingle();
+		
+//		while(spt1.isAlive() && spt2.isAlive() && spt3.isAlive() && spt4.isAlive()) {}
+		//while(spt1.isAlive() && spt2.isAlive()) {}
 		sumParallelThread();
 		
-		while(spt1.isAlive() && spt2.isAlive() && spt3.isAlive() && spt4.isAlive()) {}
-		//while(spt1.isAlive() && spt2.isAlive()) {}
-		
-		sumSingle();
 		
 	}
 	
