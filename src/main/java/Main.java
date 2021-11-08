@@ -11,110 +11,84 @@ public class Main {
 	protected static int arraySize = 200000000;
 	protected static double[] randomArray = null;
 
-	private static SumSingle sumSingle;
 	private static SumParallel sumParallel;
 	
-	private static Thread t0;
 	private static Thread t1;
 	private static Thread t2;
-	private static Thread t3;
-	private static Thread t4;
 	
 	// Variables for single-thread execution
-	private static long startTime, endTime, runTime, sum;
+	private static long startTime, endTime, runTime;
+	protected static double sum;
 	
 	
-	// Single (Thread) with SumParallelThreads
 	public static void main(String[] args) {
 		
+		// Create array with 200M random numbers between 1 & 10
 		if(randomArray == null) {
 			randomArray = generateArray();
 		}
-
-		// Create Thread with anonymous class
-		new Thread() {
-			@Override
-			public void run() {
-				System.out.println(ThreadColor.ANSI_RED + "Anonymous thread.");
-			}
-		}.start();
-		
 		
 		// Use main Thread to perform array sum
-		System.out.println("Calculating single thread sum...");
+		System.out.println(ThreadColor.ANSI_RESET + "Calculating single thread sum...final array value is: " + randomArray[arraySize-1]);
 		
-		// Grab time
+		// Grab current time
 		startTime = System.nanoTime();
 		
 		// Iterate through randomArray and sum all values
+		int index = 0;
 		for(int i = 0; i <= arraySize - 1; i++) {
+			index++;
 			sum += randomArray[i];
 		}
 
 		// Calculate total execution time & print results
 		endTime = System.nanoTime();
 		runTime = endTime - startTime;
-		System.out.println(ThreadColor.ANSI_CYAN + "Single thread sum is: " + sum + 
-				".\nSingle thread runtime is: " + runTime + " nanoSeconds.\n");
+		System.out.println(ThreadColor.ANSI_CYAN + "\nSingle thread at index " + index + " sum is: " + sum + 
+				".\nSingle thread runtime is: " + runTime + " nanoSeconds.");
 
 		// Console separation
 		System.out.println(ThreadColor.ANSI_PURPLE + "...");
 		System.out.println("...");
-		
 		System.out.println("Calculating multi-thread sum...");
+		System.out.println("...");
+		System.out.println("...");
 		
-		// Call sumParallel which creates four Threads
-		// to execute the array sum
+		// Create two Threads to execute the array sum concurrently
 		sumParallel();
 		
 		
-//		// Get current time
-//		startTime = System.nanoTime();
-//		
-//		// Count using single thread
-//		for (int i = 0; i < arraySize; i++) {
-//			singleSum += randomArray[i];
-//		}
-//		
-//		// Calculate total runTime of single thread sum & print results
-//		endTime = System.nanoTime();
-//		runTime = endTime - startTime;
-//		
-//		System.out.println("Result of singleSum = " + singleSum + 
-//				"\nRuntime for singleSum: " + runTime + " nanoSeconds.");
+		// Wait until t2 & t2 die...
+		while (t1.isAlive() && t2.isAlive()) {}
+		
+		// Calculate difference between two
+		double difference = sum - SumParallel.finalSharedSum;
+		double tempDifference = sum - SumParallel.finalSharedTempSum;
+		
+		System.out.println(ThreadColor.ANSI_RED + "\nDifference between single thread and double thread calculations is: " + difference);
+		System.out.println(ThreadColor.ANSI_GREEN + "\n\nDifference between single thread sum and double thread tempSum is: " + tempDifference);
+		
 	}
 	
-	
+	/* Create and start two Threads with same object reference */
 	public static void sumParallel() {
 		// Instantiate SumParallel object
 		sumParallel = new SumParallel();
 		
     	// Create new Threads of Runnable SumParallel
 		t1 = new Thread(sumParallel);
-		//t1.setName(" == Parallel Thread 1 == ");
+		t1.setName("Thread-1");
 		t2 = new Thread(sumParallel);
-		t3 = new Thread(sumParallel);
-		t4 = new Thread(sumParallel);
+		t2.setName("Thread-2");
 		
 		// Spin up Threads
 		t1.start();
 		t2.start();
-		t3.start();
-		t4.start();
+	
 	}
 	
-	public static void sumSingle() {
-		// Instantiate SumSingle object
-		sumSingle = new SumSingle();
-		
-		// Create a single Thread of Runnable SumSingle
-		t0 = new Thread(sumSingle);
-		t0.setPriority(10);
-		
-		// Spin up Thread
-		t0.start();
-	}
 	
+	/* Method to generate an array of random numbers */
 	public static double[] generateArray() {
 		// Create array to hold randomly generated numbers
 		randomArray = new double[arraySize];
@@ -123,7 +97,7 @@ public class Main {
 			// Generate random number (between 1 & 10) 
 			double value = Math.random() * 10;
 			
-			// Make sure it is not less than 1
+			// Make sure value is not less than 1
 			while(value < 1) {
 				value = Math.random() * 10;
 			}
