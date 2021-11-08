@@ -7,9 +7,7 @@ package main.java;
  * Then compute the sum with only one thread, and display the sum and times for both cases.
  * 
  * As a general rule, do NOT use local variables to synchronize!
- * 
  * */
-
 public class SumParallel implements Runnable {
 
 	private static int index = 0;
