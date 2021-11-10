@@ -1,4 +1,4 @@
-package main.java;
+package application;
 
 /*
  * Uses Unix Escape Code. 

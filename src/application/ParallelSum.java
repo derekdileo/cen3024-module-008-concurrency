@@ -1,4 +1,4 @@
-package main.java;
+package application;
 
 /* Implement a parallel array sum, and compare performance with single thread sum. 
  * This is not an easy assignment – just do as much as you can and turn in what you have for partial credit.
@@ -8,7 +8,7 @@ package main.java;
  * 
  * As a general rule, do NOT use local variables to synchronize!
  * */
-public class SumParallel implements Runnable {
+public class ParallelSum implements Runnable {
 
 	private static int index = 0;
 	private static double tempSum = 0;
@@ -20,7 +20,7 @@ public class SumParallel implements Runnable {
 	private double[] randomArray = Main.randomArray;
 	private long startTime, endTime, runTime;
 	
-	public SumParallel() {
+	public ParallelSum() {
 		this.setSum(0);
 	}
 

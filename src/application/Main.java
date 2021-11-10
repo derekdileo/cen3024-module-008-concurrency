@@ -1,4 +1,4 @@
-package main.java;
+package application;
 
 public class Main {
 
@@ -11,7 +11,7 @@ public class Main {
 	protected static int arraySize = 200000000;
 	protected static double[] randomArray = null;
 
-	private static SumParallel sumParallel;
+	private static ParallelSum sumParallel;
 	
 	private static Thread t1;
 	private static Thread t2;
@@ -62,8 +62,8 @@ public class Main {
 		while (t1.isAlive() && t2.isAlive()) {}
 		
 		// Calculate difference between two
-		double difference = sum - SumParallel.finalSharedSum;
-		double tempDifference = sum - SumParallel.finalSharedTempSum;
+		double difference = sum - ParallelSum.finalSharedSum;
+		double tempDifference = sum - ParallelSum.finalSharedTempSum;
 		
 		System.out.println(ThreadColor.ANSI_RED + "\nDifference between single thread and double thread calculations is: " + difference);
 		System.out.println(ThreadColor.ANSI_GREEN + "\n\nDifference between single thread sum and double thread tempSum is: " + tempDifference);
@@ -73,7 +73,7 @@ public class Main {
 	/* Create and start two Threads with same object reference */
 	public static void sumParallel() {
 		// Instantiate SumParallel object
-		sumParallel = new SumParallel();
+		sumParallel = new ParallelSum();
 		
     	// Create new Threads of Runnable SumParallel
 		t1 = new Thread(sumParallel);
